@@ -33,10 +33,13 @@ app.put("/repositories/:id", (request, response) => {
   );
 
   if (repositoryIndex < 0) {
-    return response.status(400).json({ error: "Repository not found" });
+    return response
+      .status(400)
+      .json({ error: "Repository not found. No Update" });
   }
 
-  const repository = { id, title, url, techs };
+  const likeCount = repositories[repositoryIndex].likes
+  const repository = { id, title, url, techs, likes : likeCount };
 
   repositories[repositoryIndex] = repository;
 
@@ -67,12 +70,16 @@ app.post("/repositories/:id/like", (request, response) => {
   );
 
   if (repositoryIndex < 0) {
-    return response.status(400).json({ error: "Repository not found" });
+    return response
+      .status(400)
+      .json({ error: "Repository not found. No Like Add" });
   }
 
-  repositories[repositoryIndex].likes = repositories[repositoryIndex].likes + 1;
+  const likesAdd = repositories[repositoryIndex].likes + 1;
 
-  return response.json(repository);
+  repositories[repositoryIndex].likes = likesAdd;
+
+  return response.json(repositories[repositoryIndex].likes);
 });
 
 module.exports = app;
